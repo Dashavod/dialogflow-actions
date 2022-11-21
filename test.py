@@ -1,34 +1,19 @@
+lang = input("What's the programming language you want to learn? ")
 
+match lang:
+    case "JavaScript":
+        print("You can become a web developer.")
 
-def detect_intent_texts(project_id, session_id, texts, language_code ):
-    """Returns the result of detect intent with texts as inputs.
+    case "Python":
+        print("You can become a Data Scientist")
 
-    Using the same `session_id` between requests allows continuation
-    of the conversation."""
-    from google.cloud import dialogflow_v2beta1 as dialogflow
+    case "PHP":
+        print("You can become a backend developer")
 
-    session_client = dialogflow.SessionsClient()
+    case "Solidity":
+        print("You can become a Blockchain developer")
 
-    session = session_client.session_path(project_id, session_id)
-    print("Session path: {}\n".format(session))
-
-    for text in texts:
-        text_input = dialogflow.TextInput(text=text, language_code=language_code)
-
-        query_input = dialogflow.QueryInput(text=text_input)
-
-        response = session_client.detect_intent(
-            request={"session": session, "query_input": query_input}
-        )
-
-        print("=" * 20)
-        print("Query text: {}".format(response.query_result.query_text))
-        print(
-            "Detected intent: {} (confidence: {})\n".format(
-                response.query_result.intent.display_name,
-                response.query_result.intent_detection_confidence,
-            )
-        )
-        print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
-
-detect_intent_texts('devtorium-bot-e9vy','123456789','radius Venus','en-US')
+    case "Java":
+        print("You can become a mobile app developer")
+    case _:
+        print("The language doesn't matter, what matters is solving problems.")

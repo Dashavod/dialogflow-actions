@@ -11,33 +11,11 @@ def webhook():
     req = request.get_json(silent=True, force=True)
     fulfillmentText = ''
     query_result = req.get('queryResult')
-    if query_result.get('action') == 'get.orbit_planet':
-        ### Perform set of executable code
-        ### if required
-        ### ...
-
-        fulfillmentText = service.OrbitPlanet(query_result)
-    if query_result.get('action') == 'get.info_planet':
-        ### Perform set of executable code
-        ### if required
-        ### ...
-
-
-        fulfillmentText = service.InfoPlanet(query_result)
-
-    if query_result.get('action') == 'get.cosmo_question':
-        ### Perform set of executable code
-        ### if required
-        ### ...
-
-        fulfillmentText = service.RadiusPlanet(query_result)
-
-    if query_result.get('action') == 'get.comparsion_planet':
-        ### Perform set of executable code
-        ### if required
-        ### ...
-
-        fulfillmentText = service.ComparsionPlanet(query_result)
+    match query_result.get('action'):
+        case 'get.orbit_planet': fulfillmentText = service.OrbitPlanet(query_result)
+        case 'get.info_planet': fulfillmentText = service.InfoPlanet(query_result)
+        case 'get.cosmo_question':fulfillmentText = service.RadiusPlanet(query_result)
+        case 'get.comparsion_planet': fulfillmentText = service.ComparsionPlanet(query_result)
     return {
             "fulfillmentText": fulfillmentText,
             "source": "webhookdata"
