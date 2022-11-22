@@ -16,6 +16,7 @@ def webhook():
         case 'get.info_planet': fulfillmentCard = service.InfoPlanet(query_result)
         case 'get.cosmo_question': fulfillmentCard = service.RadiusPlanet(query_result)
         case 'get.comparsion_planet': fulfillmentCard = service.ComparsionPlanet(query_result)
+        case 'get.test': fulfillmentCard = service.TestCard(query_result)
     return {
 
             "fulfillmentMessages": [

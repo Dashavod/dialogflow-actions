@@ -5,7 +5,73 @@ from DbRepo import CosmoRepository
 class Service:
     def __init__(self):
         self.cosmo = CosmoRepository()
+    def TestCard (self, query_result):
 
+        return [
+            {
+                "accessibilityText": "Dialogflow across platforms",
+                "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
+                "type": "image"
+            },
+            {
+                "type": "info",
+                "subtitle": "Build natural and rich conversational experiences",
+                "title": "Dialogflow",
+                "actionLink": "https://cloud.google.com/dialogflow/docs"
+            },
+            {
+                "event": {
+                    "parameters": {},
+                    "languageCode": "en",
+                    "name": "Event_cosmo"
+                },
+                "type": "button",
+                "text": "Radius",
+                "icon": {
+                    "type": "explore",
+                    "color": "#c67bff"
+                }
+            },
+            {
+                "icon": {
+                    "color": "#c67bff",
+                    "type": "cached"
+                },
+                "event": {
+                    "parameters": {},
+                    "languageCode": "en",
+                    "name": "Event_orbit"
+                },
+                "text": "Orbit",
+                "type": "button"
+            },
+            {
+                "event": {
+                    "languageCode": "en",
+                    "parameters": {},
+                    "name": "Event_info"
+                },
+                "text": "Info",
+                "icon": {
+                    "color": "#c67bff",
+                    "type": "info"
+                },
+                "type": "button"
+            },
+            {
+                "event": {
+                    "languageCode": "en",
+                    "parameters": {},
+                    "name": "Event_comparsion"
+                },
+                "text": "Comparsion",
+                "icon": {
+                    "color": "#c67bff",
+                    "type": "thumbs_up_down"
+                },
+                "type": "button"
+            }
+        ]
     def OrbitPlanet(self, query_result):
         item = query_result.get('parameters')
         planet = item.get('planet')
