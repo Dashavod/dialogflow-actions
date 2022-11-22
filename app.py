@@ -12,12 +12,23 @@ def webhook():
     fulfillmentText = ''
     query_result = req.get('queryResult')
     match query_result.get('action'):
-        case 'get.orbit_planet': fulfillmentText = service.OrbitPlanet(query_result)
-        case 'get.info_planet': fulfillmentText = service.InfoPlanet(query_result)
-        case 'get.cosmo_question':fulfillmentText = service.RadiusPlanet(query_result)
-        case 'get.comparsion_planet': fulfillmentText = service.ComparsionPlanet(query_result)
+        case 'get.orbit_planet': fulfillmentCard = service.OrbitPlanet(query_result)
+        case 'get.info_planet': fulfillmentCard = service.InfoPlanet(query_result)
+        case 'get.cosmo_question': fulfillmentCard = service.RadiusPlanet(query_result)
+        case 'get.comparsion_planet': fulfillmentCard = service.ComparsionPlanet(query_result)
     return {
-            "fulfillmentText": fulfillmentText,
+
+            "fulfillmentMessages": [
+                {
+                    "payload": {
+                        "richContent": [
+
+                            fulfillmentCard
+
+                        ]
+                    }
+                }
+            ],
             "source": "webhookdata"
         }
 @app.route('/')
