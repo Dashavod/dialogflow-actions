@@ -2,76 +2,85 @@ import json
 
 from DbRepo import CosmoRepository
 
+
 class Service:
     def __init__(self):
         self.cosmo = CosmoRepository()
-    def TestCard (self, query_result):
+
+    def TestCard(self, query_result):
 
         return [
             {
-                "accessibilityText": "Dialogflow across platforms",
-                "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
-                "type": "image"
-            },
-            {
-                "type": "info",
-                "subtitle": "Build natural and rich conversational experiences",
-                "title": "Dialogflow",
-                "actionLink": "https://cloud.google.com/dialogflow/docs"
-            },
-            {
-                "event": {
-                    "parameters": {},
-                    "languageCode": "en",
-                    "name": "Event_cosmo"
-                },
-                "type": "button",
-                "text": "Radius",
-                "icon": {
-                    "type": "explore",
-                    "color": "#c67bff"
+                "payload": {
+                    "richContent": [
+                        {
+                            "accessibilityText": "Dialogflow across platforms",
+                            "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
+                            "type": "image"
+                        },
+                        {
+                            "type": "info",
+                            "subtitle": "Build natural and rich conversational experiences",
+                            "title": "Dialogflow",
+                            "actionLink": "https://cloud.google.com/dialogflow/docs"
+                        },
+                        {
+                            "event": {
+                                "parameters": {},
+                                "languageCode": "en",
+                                "name": "Event_cosmo"
+                            },
+                            "type": "button",
+                            "text": "Radius",
+                            "icon": {
+                                "type": "explore",
+                                "color": "#c67bff"
+                            }
+                        },
+                        {
+                            "icon": {
+                                "color": "#c67bff",
+                                "type": "cached"
+                            },
+                            "event": {
+                                "parameters": {},
+                                "languageCode": "en",
+                                "name": "Event_orbit"
+                            },
+                            "text": "Orbit",
+                            "type": "button"
+                        },
+                        {
+                            "event": {
+                                "languageCode": "en",
+                                "parameters": {},
+                                "name": "Event_info"
+                            },
+                            "text": "Info",
+                            "icon": {
+                                "color": "#c67bff",
+                                "type": "info"
+                            },
+                            "type": "button"
+                        },
+                        {
+                            "event": {
+                                "languageCode": "en",
+                                "parameters": {},
+                                "name": "Event_comparsion"
+                            },
+                            "text": "Comparsion",
+                            "icon": {
+                                "color": "#c67bff",
+                                "type": "thumbs_up_down"
+                            },
+                            "type": "button"
+                        }
+                    ]
                 }
-            },
-            {
-                "icon": {
-                    "color": "#c67bff",
-                    "type": "cached"
-                },
-                "event": {
-                    "parameters": {},
-                    "languageCode": "en",
-                    "name": "Event_orbit"
-                },
-                "text": "Orbit",
-                "type": "button"
-            },
-            {
-                "event": {
-                    "languageCode": "en",
-                    "parameters": {},
-                    "name": "Event_info"
-                },
-                "text": "Info",
-                "icon": {
-                    "color": "#c67bff",
-                    "type": "info"
-                },
-                "type": "button"
-            },
-            {
-                "event": {
-                    "languageCode": "en",
-                    "parameters": {},
-                    "name": "Event_comparsion"
-                },
-                "text": "Comparsion",
-                "icon": {
-                    "color": "#c67bff",
-                    "type": "thumbs_up_down"
-                },
-                "type": "button"
             }
         ]
+
     def OrbitPlanet(self, query_result):
         item = query_result.get('parameters')
         planet = item.get('planet')
@@ -88,7 +97,15 @@ class Service:
             "title": f'in orbit {planet}',
             "text": orbits
         }
-        return [res]
+        return [
+            {
+                "payload": {
+                    "richContent": [
+                        res
+                    ]
+                }
+            }
+        ]
 
     def InfoPlanet(self, query_result):
         item = query_result.get('parameters')
@@ -120,7 +137,16 @@ class Service:
             "title": f"on orbit {generalInfo['Name']}:",
             "text": orbits
         }
-        return [res, orb]
+        return [
+            {
+                "payload": {
+                    "richContent": [
+                        res,
+                        orb
+                    ]
+                }
+            }
+        ]
 
     def RadiusPlanet(self, query_result):
         item = query_result.get('parameters')
@@ -134,7 +160,15 @@ class Service:
             "text": text
         }
 
-        return [res]
+        return [
+            {
+                "payload": {
+                    "richContent": [
+                        res
+                    ]
+                }
+            }
+        ]
 
     def ComparsionPlanet(self, query_result):
 
@@ -151,17 +185,59 @@ class Service:
             title = f"{second_operand[0]} greater then {first_operand[0]}"
 
         text = [f"{first_operand[0]} have {firstInfo['O_Period']} days",
-              f" {second_operand[0]} have {secondInfo['O_Period']} days"]
+                f" {second_operand[0]} have {secondInfo['O_Period']} days"]
 
         res = {
             "type": "description",
             "title": title,
             "text": text
         }
-        return [res]
+        return [
+            {
+                "payload": {
+                    "richContent": [
+                        res
+                    ]
+                }
+            }
+        ]
 
-
-
+    def OpenDialogOneAnswear(self, query_result):
+        return [
+            {
+                "card": {
+                    "title": "title",
+                    "subtitle": "subtitle google chat",
+                    "imageUri": "https://c.tadst.com/gfx/1200x630/sunrise.png?1",
+                    "buttons": [
+                        {
+                            "text": "fg",
+                            "postback": "https://help.obsidian.md/How+to/Format+your+notes"
+                        }
+                    ]
+                },
+                "platform": "GOOGLE_HANGOUTS"
+            },
+            {
+                "payload": {
+                    "richContent": [
+                        [
+                            {
+                                "type": "info",
+                                "actionLink": "https://example.com",
+                                "title": "Info item title",
+                                "subtitle": "Info item subtitle",
+                                "image": {
+                                    "src": {
+                                        "rawUrl": "https://example.com/images/logo.png"
+                                    }
+                                }
+                            }
+                        ]
+                    ]
+                }
+            }
+        ]
 
 
 def romanToInt(s):
