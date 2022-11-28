@@ -8,74 +8,73 @@ class Service:
         self.cosmo = CosmoRepository()
 
     def TestCard(self, query_result):
-
-        return [
-            {
-                "payload": {
+        return [{"payload": {
                     "richContent": [
-                        {
-                            "accessibilityText": "Dialogflow across platforms",
-                            "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
-                            "type": "image"
-                        },
-                        {
-                            "type": "info",
-                            "subtitle": "Build natural and rich conversational experiences",
-                            "title": "Dialogflow",
-                            "actionLink": "https://cloud.google.com/dialogflow/docs"
-                        },
-                        {
-                            "event": {
-                                "parameters": {},
-                                "languageCode": "en",
-                                "name": "Event_cosmo"
+                        [
+                            {
+                                "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
+                                "accessibilityText": "Dialogflow across platforms",
+                                "type": "image"
                             },
-                            "type": "button",
-                            "text": "Radius",
-                            "icon": {
-                                "type": "explore",
-                                "color": "#c67bff"
+                            {
+                                "actionLink": "https://cloud.google.com/dialogflow/docs",
+                                "type": "info",
+                                "title": "Dialogflow",
+                                "subtitle": "Build natural and rich conversational experiences"
+                            },
+                            {
+                                "text": "Radius",
+                                "type": "button",
+                                "icon": {
+                                    "type": "explore",
+                                    "color": "#c67bff"
+                                },
+                                "event": {
+                                    "name": "Event_cosmo",
+                                    "languageCode": "en",
+                                    "parameters": {}
+                                }
+                            },
+                            {
+                                "event": {
+                                    "name": "Event_orbit",
+                                    "languageCode": "en",
+                                    "parameters": {}
+                                },
+                                "icon": {
+                                    "type": "cached",
+                                    "color": "#c67bff"
+                                },
+                                "type": "button",
+                                "text": "Orbit"
+                            },
+                            {
+                                "text": "Info",
+                                "type": "button",
+                                "icon": {
+                                    "color": "#c67bff",
+                                    "type": "info"
+                                },
+                                "event": {
+                                    "name": "Event_info",
+                                    "languageCode": "en",
+                                    "parameters": {}
+                                }
+                            },
+                            {
+                                "text": "Comparsion",
+                                "icon": {
+                                    "color": "#c67bff",
+                                    "type": "thumbs_up_down"
+                                },
+                                "type": "button",
+                                "event": {
+                                    "name": "Event_comparsion",
+                                    "languageCode": "en",
+                                    "parameters": {}
+                                }
                             }
-                        },
-                        {
-                            "icon": {
-                                "color": "#c67bff",
-                                "type": "cached"
-                            },
-                            "event": {
-                                "parameters": {},
-                                "languageCode": "en",
-                                "name": "Event_orbit"
-                            },
-                            "text": "Orbit",
-                            "type": "button"
-                        },
-                        {
-                            "event": {
-                                "languageCode": "en",
-                                "parameters": {},
-                                "name": "Event_info"
-                            },
-                            "text": "Info",
-                            "icon": {
-                                "color": "#c67bff",
-                                "type": "info"
-                            },
-                            "type": "button"
-                        },
-                        {
-                            "event": {
-                                "languageCode": "en",
-                                "parameters": {},
-                                "name": "Event_comparsion"
-                            },
-                            "text": "Comparsion",
-                            "icon": {
-                                "color": "#c67bff",
-                                "type": "thumbs_up_down"
-                            },
-                            "type": "button"
-                        }
+                        ]
                     ]
                 }
             }
@@ -101,7 +100,7 @@ class Service:
             {
                 "payload": {
                     "richContent": [
-                        res
+                        [res]
                     ]
                 }
             }
@@ -141,8 +140,8 @@ class Service:
             {
                 "payload": {
                     "richContent": [
-                        res,
-                        orb
+                        [res],
+                        [orb]
                     ]
                 }
             }
@@ -164,7 +163,7 @@ class Service:
             {
                 "payload": {
                     "richContent": [
-                        res
+                        [res]
                     ]
                 }
             }
@@ -196,7 +195,7 @@ class Service:
             {
                 "payload": {
                     "richContent": [
-                        res
+                        [res]
                     ]
                 }
             }
