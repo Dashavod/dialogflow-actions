@@ -11,7 +11,6 @@ def webhook():
     req = request.get_json(silent=True, force=True)
     fulfillmentCards = ''
     query_result = req.get('queryResult')
-    print(query_result)
     match query_result.get('action'):
         case 'get.orbit_planet': fulfillmentCards = service.OrbitPlanet(query_result)
         case 'get.info_planet': fulfillmentCards = service.InfoPlanet(query_result)
@@ -19,7 +18,7 @@ def webhook():
         case 'get.comparsion_planet': fulfillmentCards = service.ComparsionPlanet(query_result)
         case 'get.test_card': fulfillmentCards = service.TestCard(query_result)
         case 'get.open_dialog_type1': fulfillmentCards = service.OpenDialogOneAnswear(query_result)
-    print(fulfillmentCards)
+        case 'get.response_dialog_type1': fulfillmentCards = service.OneAnswear(query_result)
     return {
         "fulfillmentMessages": fulfillmentCards,
 

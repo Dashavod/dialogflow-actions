@@ -1,11 +1,13 @@
 import json
 
-from DbRepo import CosmoRepository
+from DbRepo import CosmoRepository, DBRepository
+from models.quiz_one_right import QuizOneRight
 
 
 class Service:
     def __init__(self):
         self.cosmo = CosmoRepository()
+        self.db = DBRepository()
 
     def TestCard(self, query_result):
         return [{"payload": {
@@ -202,42 +204,27 @@ class Service:
         ]
 
     def OpenDialogOneAnswear(self, query_result):
-        return [
-            {
-                "card": {
-                    "title": "title",
-                    "subtitle": "subtitle google chat",
-                    "imageUri": "https://c.tadst.com/gfx/1200x630/sunrise.png?1",
-                    "buttons": [
-                        {
-                            "text": "fg",
-                            "postback": "https://help.obsidian.md/How+to/Format+your+notes"
-                        }
-                    ]
-                },
-                "platform": "GOOGLE_HANGOUTS"
-            },
-            {
-                "payload": {
+        item = self.db.find({"type": "one_right"})
+        print(item)
+        card = QuizOneRight(item)
+        return [{"payload": {
                     "richContent": [
-                        [
-                            {
-                                "type": "info",
-                                "actionLink": "https://example.com",
-                                "title": "Info item title",
-                                "subtitle": "Info item subtitle",
-                                "image": {
-                                    "src": {
-                                        "rawUrl": "https://example.com/images/logo.png"
-                                    }
-                                }
-                            }
-                        ]
+                        card.uncheked_show()
                     ]
                 }
             }
         ]
-
+    def OneAnswear(self, query_result):
+        item = self.db.find({"type": "one_right"})
+        print(item)
+        card = QuizOneRight(item)
+        return [{"payload": {
+                    "richContent": [
+                        card.show_right(query_result)
+                    ]
+                }
+            }
+        ]
 
 def romanToInt(s):
     """
