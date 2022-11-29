@@ -1,4 +1,4 @@
-class QuizOneRight:
+class QuizRight:
     def __init__(self, obj):
         self.type = obj['type']
         self.variants = obj['variants']
@@ -46,3 +46,29 @@ class QuizOneRight:
                 }})
         print(res)
         return res
+
+    def show_multiple(self):
+        res = []
+        index = 1
+        for variant in self.variants:
+            res.append({
+                "widgets": [
+                    {
+                        "keyValue": {
+                            "content": variant['variant_value'],
+                            "topLabel": index
+                        }
+                    }
+                ]
+            })
+            index += 1
+        print(res)
+        return {
+            "hangouts": {
+                "header": {
+                    "title": self.type,
+                    "subtitle": self.question_text
+                },
+                "sections": res
+            }
+        }

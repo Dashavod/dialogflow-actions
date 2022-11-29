@@ -1,7 +1,7 @@
 import json
 
 from DbRepo import CosmoRepository, DBRepository
-from models.quiz_one_right import QuizOneRight
+from models.quiz_right import QuizRight
 
 
 class Service:
@@ -203,10 +203,10 @@ class Service:
             }
         ]
 
-    def OpenDialogOneAnswear(self, query_result):
+    def OpenDialogOneAnswer(self, query_result):
         item = self.db.find({"type": "one_right"})
         print(item)
-        card = QuizOneRight(item)
+        card = QuizRight(item)
         return [{"payload": {
                     "richContent": [
                         card.uncheked_show()
@@ -214,10 +214,10 @@ class Service:
                 }
             }
         ]
-    def OneAnswear(self, query_result):
+    def OneAnswer(self, query_result):
         item = self.db.find({"type": "one_right"})
         print(item)
-        card = QuizOneRight(item)
+        card = QuizRight(item)
         return [{"payload": {
                     "richContent": [
                         card.show_right(query_result)
@@ -225,7 +225,16 @@ class Service:
                 }
             }
         ]
-
+    def MultipleAnswer(self,query_result):
+        item = self.db.find({"type": "multiple_right"})
+        print(item)
+        card = QuizRight(item)
+        return [
+            {
+                "payload": card.show_multiple(),
+                "platform": "GOOGLE_HANGOUTS"
+            }
+        ]
 def romanToInt(s):
     """
     :type s: str

@@ -17,8 +17,9 @@ def webhook():
         case 'get.cosmo_question': fulfillmentCards = service.RadiusPlanet(query_result)
         case 'get.comparsion_planet': fulfillmentCards = service.ComparsionPlanet(query_result)
         case 'get.test_card': fulfillmentCards = service.TestCard(query_result)
-        case 'get.open_dialog_type1': fulfillmentCards = service.OpenDialogOneAnswear(query_result)
-        case 'get.response_dialog_type1': fulfillmentCards = service.OneAnswear(query_result)
+        case 'get.open_dialog_type1': fulfillmentCards = service.OpenDialogOneAnswer(query_result)
+        case 'get.response_dialog_type1': fulfillmentCards = service.OneAnswer(query_result)
+        case 'get.open_dialog_type2': fulfillmentCards = service.MultipleAnswer(query_result)
     return {
         "fulfillmentMessages": fulfillmentCards,
 
