@@ -20,6 +20,7 @@ def webhook():
         case 'get.open_dialog_type1': fulfillmentCards = service.OpenDialogOneAnswer(query_result)
         case 'get.response_dialog_type1': fulfillmentCards = service.OneAnswer(query_result)
         case 'get.open_dialog_type2': fulfillmentCards = service.MultipleAnswer(query_result)
+        case 'Quiz_type2.Quiz_type2-selectnumber': fulfillmentCards = service.ShowMultipleAnswer(query_result)
     return {
         "fulfillmentMessages": fulfillmentCards,
 

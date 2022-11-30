@@ -235,6 +235,16 @@ class Service:
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]
+    def ShowMultipleAnswer(self,query_result):
+        item = self.db.find({"type": "multiple_right"})
+        print(item)
+        card = QuizRight(item)
+        return [
+            {
+                "payload": card.show_right_multiple(query_result),
+                "platform": "GOOGLE_HANGOUTS"
+            }
+        ]
 def romanToInt(s):
     """
     :type s: str
