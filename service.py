@@ -8,6 +8,7 @@ class Service:
     def __init__(self):
         self.cosmo = CosmoRepository()
         self.db = DBRepository()
+        self.questions = []
 
     def TestCard(self, query_result):
         return [{"payload": {
@@ -242,6 +243,19 @@ class Service:
         return [
             {
                 "payload": card.show_right_multiple(query_result),
+                "platform": "GOOGLE_HANGOUTS"
+            }
+        ]
+    def DisplayQuestion(self,query_result):
+        self.questions = self.db.find_many({})
+        print(self.questions)
+        #random.choices(list, k=3)
+        index = query_result['parameters']['number_of_question']
+        card = QuizRight(self.questions[int(index-1)])
+
+        return [
+            {
+                "payload": card.display_question(),
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]

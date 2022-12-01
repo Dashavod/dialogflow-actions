@@ -1,8 +1,9 @@
 class QuizRight:
     def __init__(self, obj):
         self.type = obj['type']
-        self.variants = obj['variants']
+        self.variants = obj.get('variants') or []
         self.question_text = obj['question_text']
+        self.user_input = obj.get('user_input') or ''
     def uncheked_show(self):
         res = [{
             "actionLink": "https://cloud.google.com/dialogflow/docs",
@@ -46,7 +47,27 @@ class QuizRight:
                 }})
         print(res)
         return res
-
+    def show_user_input(self):
+        return {
+            "hangouts": {
+                "header": {
+                    "title": self.type,
+                    "subtitle": self.question_text
+                }
+            }
+        }
+    def display_question(self):
+        response = ''
+        match self.type:
+            case 'one_right':
+                response = self.show_multiple(),
+                print(type(self.show_multiple()))
+            case 'multiple_right':
+                response = self.show_multiple(),
+            case 'user_input':
+                response = self.show_user_input()
+        print(f" display = {response}")
+        return dict(response[0])
     def show_multiple(self):
         res = []
         index = 1
@@ -56,7 +77,7 @@ class QuizRight:
                     {
                         "keyValue": {
                             "content": variant['variant_value'],
-                            "topLabel": index
+                            "topLabel": str(index)
                         }
                     }
                 ]

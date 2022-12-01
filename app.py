@@ -11,36 +11,70 @@ user_info = {}
 # create a route for webhook
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
+    index = 0
     req = request.get_json(silent=True, force=True)
-    print(req)
+    followupEvent =''
     fulfillmentCards = ''
     query_result = req.get('queryResult')
+    response = {"source": "webhookdata"}
     match query_result.get('action'):
         case 'get.orbit_planet':
             fulfillmentCards = service.OrbitPlanet(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'get.info_planet':
             fulfillmentCards = service.InfoPlanet(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'get.cosmo_question':
             fulfillmentCards = service.RadiusPlanet(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'get.comparsion_planet':
             fulfillmentCards = service.ComparsionPlanet(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'get.test_card':
             fulfillmentCards = service.TestCard(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'get.open_dialog_type1':
             fulfillmentCards = service.OpenDialogOneAnswer(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'get.response_dialog_type1':
             fulfillmentCards = service.OneAnswer(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'get.open_dialog_type2':
             fulfillmentCards = service.MultipleAnswer(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'Quiz_type2.Quiz_type2-selectnumber':
             fulfillmentCards = service.ShowMultipleAnswer(query_result)
-        case 'input.welcome' : fulfillmentCards = chat_autorize(req)
-        case 'get.url' : fulfillmentCards = chat_card(req)
-    return {
-        "fulfillmentMessages": fulfillmentCards,
-
-        "source": "webhookdata"
-    }
+            response["fulfillmentMessages"] = fulfillmentCards
+        case 'input.welcome' :
+            fulfillmentCards = chat_autorize(req)
+            response["fulfillmentMessages"] = fulfillmentCards
+        case 'get.url' :
+            fulfillmentCards = chat_card(req)
+            response["fulfillmentMessages"] = fulfillmentCards
+        case 'startquiz.startquiz-yes.startquiz-yes-question':
+            fulfillmentCards = service.DisplayQuestion(query_result)
+            response["fulfillmentMessages"] = fulfillmentCards
+        case 'startquiz.startquiz-yes':
+            index = 1
+            followupEvent = {
+                "name": "open_question",
+                "parameters": {
+                    "number_of_question": index
+                },
+                "languageCode": "en-US"
+            }
+            response["followupEventInput"] = followupEvent
+        case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-selectnumber':
+            num = index + 1  if index > 3 else 1
+            followupEvent = {
+                "name": "open_question",
+                "parameters": {
+                    "number_of_question": num
+                },
+                "languageCode": "en-US"
+            }
+            response["followupEventInput"] = followupEvent
+    return response
 def chat_autorize(query_result):
 
     return [
