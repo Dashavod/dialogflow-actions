@@ -7,11 +7,11 @@ app = Flask(__name__)
 service = Service()
 user_info = {}
 
-
+index = 1
 # create a route for webhook
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
-    index = 0
+    global index
     req = request.get_json(silent=True, force=True)
     followupEvent =''
     fulfillmentCards = ''
@@ -51,10 +51,19 @@ def webhook():
         case 'get.url' :
             fulfillmentCards = chat_card(req)
             response["fulfillmentMessages"] = fulfillmentCards
+        case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-selectnumber' :
+            print(f"answer index {index}")
+            fulfillmentCards = service.ShowMultipleAnswer(query_result,index)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'startquiz.startquiz-yes.startquiz-yes-question':
             fulfillmentCards = service.DisplayQuestion(query_result)
             response["fulfillmentMessages"] = fulfillmentCards
+        case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-input':
+            fulfillmentCards = service.ShowInputAnswer(query_result,index)
+            response["fulfillmentMessages"] = fulfillmentCards
         case 'startquiz.startquiz-yes':
+            print("yes intent")
+
             index = 1
             followupEvent = {
                 "name": "open_question",
@@ -64,12 +73,17 @@ def webhook():
                 "languageCode": "en-US"
             }
             response["followupEventInput"] = followupEvent
-        case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-selectnumber':
-            num = index + 1  if index > 3 else 1
+        case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-next':
+            if index < 4:
+
+                index +=1
+            else:
+                index = 1
+            print(f"index =  {index}")
             followupEvent = {
                 "name": "open_question",
                 "parameters": {
-                    "number_of_question": num
+                    "number_of_question": index
                 },
                 "languageCode": "en-US"
             }

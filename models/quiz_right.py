@@ -3,7 +3,7 @@ class QuizRight:
         self.type = obj['type']
         self.variants = obj.get('variants') or []
         self.question_text = obj['question_text']
-        self.user_input = obj.get('user_input') or ''
+        self.user_input = obj.get('correct_input') or ''
     def uncheked_show(self):
         res = [{
             "actionLink": "https://cloud.google.com/dialogflow/docs",
@@ -27,10 +27,8 @@ class QuizRight:
                         "correct": variant['correct'],
                     }
                 }})
-        print(res)
         return res
     def show_right(self,query_result):
-        print(query_result)
         res = [{
             "actionLink": "https://cloud.google.com/dialogflow/docs",
             "type": "info",
@@ -45,7 +43,6 @@ class QuizRight:
                     "type": "check_box" if variant['correct'] else "check_box_outline_blank ",
                     "color": "#c67bff"
                 }})
-        print(res)
         return res
     def show_user_input(self):
         return {
@@ -61,12 +58,12 @@ class QuizRight:
         match self.type:
             case 'one_right':
                 response = self.show_multiple(),
-                print(type(self.show_multiple()))
             case 'multiple_right':
                 response = self.show_multiple(),
             case 'user_input':
-                response = self.show_user_input()
-        print(f" display = {response}")
+                response = [self.show_user_input()]
+                print(response)
+
         return dict(response[0])
     def show_multiple(self):
         res = []
@@ -83,7 +80,6 @@ class QuizRight:
                 ]
             })
             index += 1
-        print(res)
         return {
             "hangouts": {
                 "header": {
@@ -97,7 +93,6 @@ class QuizRight:
     def show_right_multiple(self,query):
         res = []
         index = 1
-        print(query)
         correct = 0
         for variant in self.variants:
             style = "color=\"#80e27e\"" if variant['correct'] else "color=\"#f44336\""
@@ -138,7 +133,6 @@ class QuizRight:
                 }
             ]
         })
-        print(f"show_right_multiple  {int(correct)}")
         return {
             "hangouts": {
                 "header": {
@@ -146,5 +140,21 @@ class QuizRight:
                     "subtitle": self.question_text
                 },
                 "sections": res
+            }
+        }
+
+    def show_input_multiple(self,query):
+
+        print(self)
+        if self.user_input == query['parameters']['user-input']:
+            correct = f"Your answer is correct {self.user_input} "
+        else:
+            correct = f"Your answer isn`t correct( \n Correct answer is {self.user_input} "
+        return {
+            "hangouts": {
+                "header": {
+                    "title": self.question_text,
+                    "subtitle": correct
+                }
             }
         }

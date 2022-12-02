@@ -236,21 +236,30 @@ class Service:
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]
-    def ShowMultipleAnswer(self,query_result):
-        item = self.db.find({"type": "multiple_right"})
-        print(item)
-        card = QuizRight(item)
+    def ShowMultipleAnswer(self,query_result,index):
+        print(f"answer index {index}")
+        card = QuizRight(self.questions[int(index-1)])
         return [
             {
                 "payload": card.show_right_multiple(query_result),
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]
+    def ShowInputAnswer(self,query_result,index):
+        print(f"answer index {index}")
+        card = QuizRight(self.questions[int(index-1)])
+        return [
+            {
+                "payload": card.show_input_multiple(query_result),
+                "platform": "GOOGLE_HANGOUTS"
+            }
+        ]
     def DisplayQuestion(self,query_result):
         self.questions = self.db.find_many({})
-        print(self.questions)
+
         #random.choices(list, k=3)
         index = query_result['parameters']['number_of_question']
+        print(f"question  {self.questions[int(index-1)]}")
         card = QuizRight(self.questions[int(index-1)])
 
         return [
