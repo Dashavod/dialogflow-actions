@@ -133,6 +133,14 @@ def chat_card(query_result):
     ]
 
 
+
+
+
+
+
+
+
+####### try for OAuth
 import os
 import flask
 import requests
