@@ -9,78 +9,79 @@ class Service:
         self.cosmo = CosmoRepository()
         self.db = DBRepository()
         self.questions = []
+        self.quantity_correct = 0
 
     def TestCard(self, query_result):
         return [{"payload": {
-                    "richContent": [
-                        [
-                            {
-                                "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
-                                "accessibilityText": "Dialogflow across platforms",
-                                "type": "image"
-                            },
-                            {
-                                "actionLink": "https://cloud.google.com/dialogflow/docs",
-                                "type": "info",
-                                "title": "Dialogflow",
-                                "subtitle": "Build natural and rich conversational experiences"
-                            },
-                            {
-                                "text": "Radius",
-                                "type": "button",
-                                "icon": {
-                                    "type": "explore",
-                                    "color": "#c67bff"
-                                },
-                                "event": {
-                                    "name": "Event_cosmo",
-                                    "languageCode": "en",
-                                    "parameters": {}
-                                }
-                            },
-                            {
-                                "event": {
-                                    "name": "Event_orbit",
-                                    "languageCode": "en",
-                                    "parameters": {}
-                                },
-                                "icon": {
-                                    "type": "cached",
-                                    "color": "#c67bff"
-                                },
-                                "type": "button",
-                                "text": "Orbit"
-                            },
-                            {
-                                "text": "Info",
-                                "type": "button",
-                                "icon": {
-                                    "color": "#c67bff",
-                                    "type": "info"
-                                },
-                                "event": {
-                                    "name": "Event_info",
-                                    "languageCode": "en",
-                                    "parameters": {}
-                                }
-                            },
-                            {
-                                "text": "Comparsion",
-                                "icon": {
-                                    "color": "#c67bff",
-                                    "type": "thumbs_up_down"
-                                },
-                                "type": "button",
-                                "event": {
-                                    "name": "Event_comparsion",
-                                    "languageCode": "en",
-                                    "parameters": {}
-                                }
-                            }
-                        ]
-                    ]
-                }
-            }
+            "richContent": [
+                [
+                    {
+                        "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
+                        "accessibilityText": "Dialogflow across platforms",
+                        "type": "image"
+                    },
+                    {
+                        "actionLink": "https://cloud.google.com/dialogflow/docs",
+                        "type": "info",
+                        "title": "Dialogflow",
+                        "subtitle": "Build natural and rich conversational experiences"
+                    },
+                    {
+                        "text": "Radius",
+                        "type": "button",
+                        "icon": {
+                            "type": "explore",
+                            "color": "#c67bff"
+                        },
+                        "event": {
+                            "name": "Event_cosmo",
+                            "languageCode": "en",
+                            "parameters": {}
+                        }
+                    },
+                    {
+                        "event": {
+                            "name": "Event_orbit",
+                            "languageCode": "en",
+                            "parameters": {}
+                        },
+                        "icon": {
+                            "type": "cached",
+                            "color": "#c67bff"
+                        },
+                        "type": "button",
+                        "text": "Orbit"
+                    },
+                    {
+                        "text": "Info",
+                        "type": "button",
+                        "icon": {
+                            "color": "#c67bff",
+                            "type": "info"
+                        },
+                        "event": {
+                            "name": "Event_info",
+                            "languageCode": "en",
+                            "parameters": {}
+                        }
+                    },
+                    {
+                        "text": "Comparsion",
+                        "icon": {
+                            "color": "#c67bff",
+                            "type": "thumbs_up_down"
+                        },
+                        "type": "button",
+                        "event": {
+                            "name": "Event_comparsion",
+                            "languageCode": "en",
+                            "parameters": {}
+                        }
+                    }
+                ]
+            ]
+        }
+        }
         ]
 
     def OrbitPlanet(self, query_result):
@@ -209,24 +210,26 @@ class Service:
         print(item)
         card = QuizRight(item)
         return [{"payload": {
-                    "richContent": [
-                        card.uncheked_show()
-                    ]
-                }
-            }
+            "richContent": [
+                card.uncheked_show()
+            ]
+        }
+        }
         ]
+
     def OneAnswer(self, query_result):
         item = self.db.find({"type": "one_right"})
         print(item)
         card = QuizRight(item)
         return [{"payload": {
-                    "richContent": [
-                        card.show_right(query_result)
-                    ]
-                }
-            }
+            "richContent": [
+                card.show_right(query_result['parameters']['correct'])
+            ]
+        }
+        }
         ]
-    def MultipleAnswer(self,query_result):
+
+    def MultipleAnswer(self, query_result):
         item = self.db.find({"type": "multiple_right"})
         print(item)
         card = QuizRight(item)
@@ -236,31 +239,38 @@ class Service:
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]
-    def ShowMultipleAnswer(self,query_result,index):
+
+    def ShowMultipleAnswer(self, query_result, index):
         print(f"answer index {index}")
-        card = QuizRight(self.questions[int(index-1)])
+        card = QuizRight(self.questions[int(index - 1)])
+        self.quantity_correct += card.correct_multiple(query_result['parameters']['number'])
+        print(f"quantity_correct  {self.quantity_correct}")
         return [
             {
-                "payload": card.show_right_multiple(query_result),
+                "payload": card.show_right_multiple(query_result['parameters']['number']),
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]
-    def ShowInputAnswer(self,query_result,index):
+
+    def ShowInputAnswer(self, query_result, index):
         print(f"answer index {index}")
-        card = QuizRight(self.questions[int(index-1)])
+        card = QuizRight(self.questions[int(index - 1)])
+        self.quantity_correct += card.input_correct(query_result['parameters']['user-input'])
+        print(f"quantity_correct  {self.quantity_correct}")
         return [
             {
-                "payload": card.show_input_multiple(query_result),
+                "payload": card.show_input_multiple(query_result['parameters']['user-input']),
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]
-    def DisplayQuestion(self,query_result):
+
+    def DisplayQuestion(self, query_result):
         self.questions = self.db.find_many({})
 
-        #random.choices(list, k=3)
+        # random.choices(list, k=3)
         index = query_result['parameters']['number_of_question']
-        print(f"question  {self.questions[int(index-1)]}")
-        card = QuizRight(self.questions[int(index-1)])
+        print(f"question  {self.questions[int(index - 1)]}")
+        card = QuizRight(self.questions[int(index - 1)])
 
         return [
             {
@@ -268,6 +278,8 @@ class Service:
                 "platform": "GOOGLE_HANGOUTS"
             }
         ]
+
+
 def romanToInt(s):
     """
     :type s: str

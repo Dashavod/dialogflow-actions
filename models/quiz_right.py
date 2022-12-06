@@ -32,7 +32,7 @@ class QuizRight:
         res = [{
             "actionLink": "https://cloud.google.com/dialogflow/docs",
             "type": "info",
-            "title": "You`re right" if query_result['parameters']['correct'] else "Wrong",
+            "title": "You`re right" if query_result else "Wrong",
             "subtitle": self.question_text
         }, ]
         for variant in self.variants:
@@ -89,7 +89,14 @@ class QuizRight:
                 "sections": res
             }
         }
-
+    def correct_multiple(self,query):
+        correct = 0
+        index = 1
+        for variant in self.variants:
+            if index in list(query):
+                correct = correct + 1 if variant['correct'] else correct
+            index = index + 1
+        return correct
     def show_right_multiple(self,query):
         res = []
         index = 1
@@ -97,7 +104,7 @@ class QuizRight:
         for variant in self.variants:
             style = "color=\"#80e27e\"" if variant['correct'] else "color=\"#f44336\""
 
-            if index in list(query['parameters']['number']):
+            if index in list(query):
                 correct = correct + 1 if variant['correct'] else correct
                 res.append({
                     "widgets": [
@@ -142,11 +149,12 @@ class QuizRight:
                 "sections": res
             }
         }
-
+    def input_correct(self,query):
+        return True if self.user_input == query else False
     def show_input_multiple(self,query):
 
         print(self)
-        if self.user_input == query['parameters']['user-input']:
+        if self.user_input == query:
             correct = f"Your answer is correct {self.user_input} "
         else:
             correct = f"Your answer isn`t correct( \n Correct answer is {self.user_input} "

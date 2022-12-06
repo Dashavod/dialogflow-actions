@@ -74,23 +74,32 @@ def webhook():
             }
             response["followupEventInput"] = followupEvent
         case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-next':
+            index += 1
             if index < 4:
 
-                index +=1
+
+                followupEvent = {
+                    "name": "open_question",
+                    "parameters": {
+                        "number_of_question": index
+                    },
+                    "languageCode": "en-US"
+                }
             else:
                 index = 1
+                followupEvent = {
+                    "name": "close_quiz",
+                    "parameters": {
+                        "quantity_correct": service.quantity_correct
+                    },
+                    "languageCode": "en-US"
+                }
             print(f"index =  {index}")
-            followupEvent = {
-                "name": "open_question",
-                "parameters": {
-                    "number_of_question": index
-                },
-                "languageCode": "en-US"
-            }
+
             response["followupEventInput"] = followupEvent
     return response
 def chat_autorize(query_result):
-
+    print(query_result)
     return [
 {
    "text": {
