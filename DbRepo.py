@@ -6,11 +6,11 @@ class DBRepository:
     def __init__(self, table = 'Quiz'):
         client = MongoClient(
             "mongodb+srv://root:nMoiWNI9fZAvAEf2@cluster0.hif69ym.mongodb.net/?retryWrites=true&w=majority")
-        db = client.get_database('Train_Bot')
-        self.table = db[table]
+        self.db = client.get_database('Train_Bot')
+        self.table = self.db[table]
 
     def insert(self, param):
-        self.table.insert_one(param)
+        self.db["Questions"].insert_one(param)
 
     def find(self, filter):
         return self.table.find_one(filter)

@@ -8,30 +8,25 @@ service = Service()
 user_info = {}
 
 index = 1
+
+
 # create a route for webhook
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     global index
+
     req = request.get_json(silent=True, force=True)
-    followupEvent =''
+    followupEvent = ''
     fulfillmentCards = ''
     query_result = req.get('queryResult')
     response = {"source": "webhookdata"}
     match query_result.get('action'):
-        case 'get.orbit_planet':
-            fulfillmentCards = service.OrbitPlanet(query_result)
+
+        case "Benefits.Benefits-sport":
+            fulfillmentCards = service.BenefitSportInfo(query_result)
             response["fulfillmentMessages"] = fulfillmentCards
-        case 'get.info_planet':
-            fulfillmentCards = service.InfoPlanet(query_result)
-            response["fulfillmentMessages"] = fulfillmentCards
-        case 'get.cosmo_question':
-            fulfillmentCards = service.RadiusPlanet(query_result)
-            response["fulfillmentMessages"] = fulfillmentCards
-        case 'get.comparsion_planet':
-            fulfillmentCards = service.ComparsionPlanet(query_result)
-            response["fulfillmentMessages"] = fulfillmentCards
-        case 'get.test_card':
-            fulfillmentCards = service.TestCard(query_result)
+        case 'actions.benefits':
+            fulfillmentCards = service.BenefitGeneralInfo()
             response["fulfillmentMessages"] = fulfillmentCards
         case 'get.open_dialog_type1':
             fulfillmentCards = service.OpenDialogOneAnswer(query_result)
@@ -45,21 +40,28 @@ def webhook():
         case 'Quiz_type2.Quiz_type2-selectnumber':
             fulfillmentCards = service.ShowMultipleAnswer(query_result)
             response["fulfillmentMessages"] = fulfillmentCards
-        case 'input.welcome' :
+        case 'input.welcome':
             fulfillmentCards = chat_autorize(req)
             response["fulfillmentMessages"] = fulfillmentCards
-        case 'get.url' :
+        case 'get.url':
             fulfillmentCards = chat_card(req)
             response["fulfillmentMessages"] = fulfillmentCards
-        case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-selectnumber' :
+        case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-selectnumber':
             print(f"answer index {index}")
-            fulfillmentCards = service.ShowMultipleAnswer(query_result,index)
+            fulfillmentCards = service.ShowMultipleAnswer(query_result, index)
             response["fulfillmentMessages"] = fulfillmentCards
         case 'startquiz.startquiz-yes.startquiz-yes-question':
             fulfillmentCards = service.DisplayQuestion(query_result)
             response["fulfillmentMessages"] = fulfillmentCards
         case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-input':
-            fulfillmentCards = service.ShowInputAnswer(query_result,index)
+            fulfillmentCards = service.ShowInputAnswer(query_result, index)
+            response["fulfillmentMessages"] = fulfillmentCards
+        case 'input.unknown':
+            fulfillmentCards = service.UnknownAnswer(req)
+            response["fulfillmentMessages"] = fulfillmentCards
+        case 'Ratebot.Ratebot-user':
+            fulfillmentCards = service.UnknownAnswer(req)
+            fulfillmentCards[0]["text"]['text'][0] = 'Thank you, I will remember your comment'
             response["fulfillmentMessages"] = fulfillmentCards
         case 'startquiz.startquiz-yes':
             print("yes intent")
@@ -76,7 +78,6 @@ def webhook():
         case 'startquiz.startquiz-yes.startquiz-yes-custom.startquiz-yes-question-next':
             index += 1
             if index < 4:
-
 
                 followupEvent = {
                     "name": "open_question",
@@ -97,21 +98,78 @@ def webhook():
             print(f"index =  {index}")
 
             response["followupEventInput"] = followupEvent
+    print(response)
     return response
+
+
 def chat_autorize(query_result):
     print(query_result)
     return [
-{
-   "text": {
-   "text": [
-        f"Hello {query_result['originalDetectIntentRequest']['payload']['data']['event']['user']['displayName']}"
-   ]
-},
-  "platform": "GOOGLE_HANGOUTS"
-}]
+        {
+            "text": {
+                "text": [
+                    f"Hello {query_result['originalDetectIntentRequest']['payload']['data']['event']['user']['displayName']}"
+                ]
+            },
+            "platform": "GOOGLE_HANGOUTS"
+        },
+        {
+            "text": {
+                "text": [
+                    f"I'm a Devtorium-bot, I'm here to help you if you have any questions, choose from following category"
+                ]
+            },
+            "platform": "GOOGLE_HANGOUTS"
+        },
+        {
+            "platform": "GOOGLE_HANGOUTS",
+            "payload": {
+                "hangouts": {
+                    "header": {
+                        "title": "Choose category",
+                        "subtitle": " "
+                    },
+                    "sections": [
+                        {
+                        "widgets": [
+                            {
+                                "keyValue": {
+                                    "content": "holidays, structure, equipment,resources",
+                                    "topLabel": "Company"
+                                }
+                            }
+                        ]
+                    },
+                        {
+                            "widgets": [
+                                {
+                                    "keyValue": {
+                                        "content": "Sport,Health,Group activities,lunch,birth of a child,marriage,english classes",
+                                        "topLabel": "Benefits"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "widgets": [
+                                {
+                                    "keyValue": {
+                                        "content": "courses,certification, conferences, education resources",
+                                        "topLabel": "Learning"
+                                    }
+                                }
+                            ]
+                        },
+
+                    ],
+                }
+            }
+        }
+    ]
+
 
 def chat_card(query_result):
-        return[
+    return [
         {
             "payload": {
                 "hangouts": {
@@ -122,7 +180,9 @@ def chat_card(query_result):
                         {
                             "widgets": [{
                                 "image": {
-                                    "imageUrl": query_result['originalDetectIntentRequest']['payload']['data']['event']['user']['avatarUrl']
+                                    "imageUrl":
+                                        query_result['originalDetectIntentRequest']['payload']['data']['event']['user'][
+                                            'avatarUrl']
                                 }
                             }]
                         }]
@@ -131,13 +191,6 @@ def chat_card(query_result):
             "platform": "GOOGLE_HANGOUTS"
         }
     ]
-
-
-
-
-
-
-
 
 
 ####### try for OAuth
@@ -155,7 +208,8 @@ CLIENT_SECRETS_FILE = "client_secrets.json"
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account and requires requests to use an SSL connection.
-SCOPES = scopes = ['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+SCOPES = scopes = ['openid', 'https://www.googleapis.com/auth/userinfo.email',
+                   'https://www.googleapis.com/auth/userinfo.profile']
 # API_SERVICE_NAME = 'people'
 # API_VERSION = 'v1'
 

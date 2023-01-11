@@ -10,198 +10,75 @@ class Service:
         self.db = DBRepository()
         self.questions = []
         self.quantity_correct = 0
+    def  BenefitSportInfo(self,query_result):
+        return [
+            {
+                "platform": "GOOGLE_HANGOUTS",
+                "payload": {
+                    "hangouts": {
+                        "header": {
+                            "title": "Sport category",
+                            "subtitle": f"{query_result['parameters']['benefits-sport']}"
+                        },
+                        "sections": [
+                            {
+                                "widgets": [
+                                    {
+                                        "textParagraph": {
+                                            "text":"<b>Compensation of sports expenses (swimming pool, yoga, dancing, etc.)</b>\n\n 700 UAH per month The presence of payment receipt and document proving attendance of training lessons at least 4 times per month is required"
+                                        }
+                                    },
 
-    def TestCard(self, query_result):
-        return [{"payload": {
-            "richContent": [
-                [
-                    {
-                        "rawUrl": "https://images.cnbctv18.com/wp-content/uploads/2018/05/10.jpg",
-                        "accessibilityText": "Dialogflow across platforms",
-                        "type": "image"
-                    },
-                    {
-                        "actionLink": "https://cloud.google.com/dialogflow/docs",
-                        "type": "info",
-                        "title": "Dialogflow",
-                        "subtitle": "Build natural and rich conversational experiences"
-                    },
-                    {
-                        "text": "Radius",
-                        "type": "button",
-                        "icon": {
-                            "type": "explore",
-                            "color": "#c67bff"
-                        },
-                        "event": {
-                            "name": "Event_cosmo",
-                            "languageCode": "en",
-                            "parameters": {}
-                        }
-                    },
-                    {
-                        "event": {
-                            "name": "Event_orbit",
-                            "languageCode": "en",
-                            "parameters": {}
-                        },
-                        "icon": {
-                            "type": "cached",
-                            "color": "#c67bff"
-                        },
-                        "type": "button",
-                        "text": "Orbit"
-                    },
-                    {
-                        "text": "Info",
-                        "type": "button",
-                        "icon": {
-                            "color": "#c67bff",
-                            "type": "info"
-                        },
-                        "event": {
-                            "name": "Event_info",
-                            "languageCode": "en",
-                            "parameters": {}
-                        }
-                    },
-                    {
-                        "text": "Comparsion",
-                        "icon": {
-                            "color": "#c67bff",
-                            "type": "thumbs_up_down"
-                        },
-                        "type": "button",
-                        "event": {
-                            "name": "Event_comparsion",
-                            "languageCode": "en",
-                            "parameters": {}
-                        }
+                                ]
+                            }
+                        ]
                     }
-                ]
-            ]
-        }
-        }
-        ]
+                },
 
-    def OrbitPlanet(self, query_result):
-        item = query_result.get('parameters')
-        planet = item.get('planet')
-        res = self.cosmo.filterPlanet(planet)
-        names = []
-        text = ''
-        for i in res:
-            names.append({'name': i['Name'], 'number_rome': i['Number'], 'number': romanToInt(i['Number'])})
-        names.sort(key=lambda x: x.get('number'))
-        orbits = []
-        for i in names: orbits.append(f" {i['number_rome']} {i['name']},\n")
-        res = {
-            "type": "description",
-            "title": f'in orbit {planet}',
-            "text": orbits
-        }
-        return [
-            {
-                "payload": {
-                    "richContent": [
-                        [res]
-                    ]
-                }
             }
         ]
 
-    def InfoPlanet(self, query_result):
-        item = query_result.get('parameters')
-        planet = item.get('planet')
-        generalInfo = self.cosmo.findPlanet(planet)
-        res = self.cosmo.filterPlanet(planet)
-        names = []
-        for i in res:
-            names.append({'name': i['Name'], 'number_rome': i['Number'], 'number': romanToInt(i['Number'])})
-        names.sort(key=lambda x: x.get('number'))
-        text = [f"Orbit: {generalInfo['Orbits']}",
-                f"Number in orbit:{generalInfo['Number']}",
-                f"Radius: {generalInfo['Distance']}000km",
-                f"Period: {generalInfo['O_Period']} days",
-                f"Incl:{generalInfo['Incl']}",
-                f"Eccen:{generalInfo['Eccen']}",
-                f"Discoverer:{generalInfo['Discoverer']}",
-                f"Date: {generalInfo['Date']}",
-                f"Pseudonym:{generalInfo['AKA']}"]
-        orbits = []
-        for i in names: orbits.append(f" {i['number_rome']} {i['name']}")
-        res = {
-            "type": "description",
-            "title": f"On orbit{generalInfo['Name']}:",
-            "text": text
-        }
-        orb = {
-            "type": "description",
-            "title": f"on orbit {generalInfo['Name']}:",
-            "text": orbits
-        }
+    def  BenefitGeneralInfo(self):
         return [
             {
+                "platform": "GOOGLE_HANGOUTS",
                 "payload": {
-                    "richContent": [
-                        [res],
-                        [orb]
-                    ]
-                }
-            }
-        ]
+                    "hangouts": {
+                        "header": {
+                            "title": "What are the company benefits?",
+                            "subtitle": "General Info"
+                        },
+                        "sections": [
+                            {
+                                "widgets": [
+                                    {
+                                        "textParagraph": {
+                                            "text":"Devtorium cares about its people in various activities and important life events."
+                                        }
+                                    },
+                                    {
+                                        "textParagraph": {
+                                            "text": "All benefits, except daily lunch refunds and English classes in the company's office,can be used after the <b>successful passing of the probation period</b>. "
+                                        }
+                                    },
+                                    {
+                                        "textParagraph": {
+                                            "text": "Before having compensation, you should address to your <b>Canton Representative</b>,and announce that you had some recoverable costs and verify them in the agreed way (payment receipt, etc.).\n The compensation for expended money is added to the wage\n\n"
+                                        }
+                                    },
+                                    {
+                                        "keyValue": {
+                                            "icon": "HOTEL_ROOM_TYPE",
+                                            "content": " ",
+                                            "topLabel": "Enter your question"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
 
-    def RadiusPlanet(self, query_result):
-        item = query_result.get('parameters')
-        planet = item.get('planet')
-        res = self.cosmo.findPlanet(planet)
-        title = query_result.get('queryText')
-        text = [f"Radius of {planet} is", f"{res['Distance']}000km"]
-        res = {
-            "type": "description",
-            "title": title,
-            "text": text
-        }
-
-        return [
-            {
-                "payload": {
-                    "richContent": [
-                        [res]
-                    ]
-                }
-            }
-        ]
-
-    def ComparsionPlanet(self, query_result):
-
-        item = query_result.get('parameters')
-        first_operand = item.get('first_operand')
-        second_operand = item.get('second_operand')
-
-        firstInfo = self.cosmo.findPlanet(first_operand[0])
-        secondInfo = self.cosmo.findPlanet(second_operand[0])
-
-        if (abs(float(firstInfo['O_Period'])) > abs(float(secondInfo['O_Period']))):
-            title = f"{first_operand[0]} greater then {second_operand[0]}"
-        else:
-            title = f"{second_operand[0]} greater then {first_operand[0]}"
-
-        text = [f"{first_operand[0]} have {firstInfo['O_Period']} days",
-                f" {second_operand[0]} have {secondInfo['O_Period']} days"]
-
-        res = {
-            "type": "description",
-            "title": title,
-            "text": text
-        }
-        return [
-            {
-                "payload": {
-                    "richContent": [
-                        [res]
-                    ]
-                }
             }
         ]
 
@@ -228,7 +105,22 @@ class Service:
         }
         }
         ]
+    def UnknownAnswer(self, query_result):
+        username = query_result['originalDetectIntentRequest']['payload']['data']['event']['user']['displayName']
+        user_question = query_result["queryResult"]["queryText"]
+        self.db.insert({"question": user_question,
+                        "username": username,
+                        "response": False})
+        return [
+            {
+                "text": {
+                    "text": [
+                        "I don't know the answer to this question yet, but I will remember it"
+                    ]
 
+                }
+            }
+        ]
     def MultipleAnswer(self, query_result):
         item = self.db.find({"type": "multiple_right"})
         print(item)
